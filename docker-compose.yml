@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  django-backend:
+    build: ./country_states_backend/country_states_backend  # Ensure this path points to where your Django Dockerfile is.
+    volumes:
+      - ./country_states_backend/country_states_backend:/app  # Syncs the project directory with the container.
+    ports:
+      - "8000:8000"  # Maps port 8000 of the container to port 8000 on the host.
+    environment:
+      - DEBUG=1  # Set to 1 for development, change as needed.
+
+  react-frontend:
+    build: ./CountryStatesApp  # Ensure this path points to where your React Dockerfile is.
+    volumes:
+      - ./CountryStatesApp:/app  # Syncs the project directory with the container.
+      - /app/node_modules  # Keeps `node_modules` in a separate volume.
+    ports:
+      - "3000:3000"  # Maps port 3000 of the container to port 3000 on the host.
+    stdin_open: true
+    tty: true

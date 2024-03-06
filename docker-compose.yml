@@ -1,21 +1,33 @@
 version: '3.8'
 
 services:
-  django-backend:
-    build: ./country_states_backend/country_states_backend  # Ensure this path points to where your Django Dockerfile is.
+  db:
+    image: postgres:13
     volumes:
-      - ./country_states_backend/country_states_backend:/app  # Syncs the project directory with the container.
-    ports:
-      - "8000:8000"  # Maps port 8000 of the container to port 8000 on the host.
+      - ./postgres_data:/var/lib/postgresql/data
     environment:
-      - DEBUG=1  # Set to 1 for development, change as needed.
+      POSTGRES_DB: countryStates
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432" 
+
+  django-backend:
+    build: ./country_states_backend/country_states_backend  
+    volumes: 
+    - ./country_states_backend/country_states_backend:/app 
+    ports:
+      - "8000:8000" 
+    environment:
+      # - DEBUG=1 
+      DATABASE_URL: postgres://postgres:password@db/postgres
 
   react-frontend:
-    build: ./CountryStatesApp  # Ensure this path points to where your React Dockerfile is.
+    build: ./CountryStatesApp
     volumes:
-      - ./CountryStatesApp:/app  # Syncs the project directory with the container.
-      - /app/node_modules  # Keeps `node_modules` in a separate volume.
+      - ./CountryStatesApp:/app
+      - /app/node_modules
     ports:
-      - "3000:3000"  # Maps port 3000 of the container to port 3000 on the host.
+      - "3000:3000"
     stdin_open: true
     tty: true

@@ -13,7 +13,9 @@ services:
       - "5432:5432" 
 
   django-backend:
-    build: ./country_states_backend/country_states_backend  
+    build: 
+      context: ./country_states_backend/country_states_backend  
+      target: production
     volumes: 
     - ./country_states_backend/country_states_backend:/app 
     ports:
@@ -23,9 +25,11 @@ services:
       DATABASE_URL: postgres://postgres:password@db/postgres
 
   react-frontend:
-    build: ./CountryStatesApp
+    build: 
+      context: ./CountryStatesApp
+      target: production
     volumes:
-      - ./CountryStatesApp:/app
+      # - ./CountryStatesApp:/app
       - /app/node_modules
     ports:
       - "3000:3000"

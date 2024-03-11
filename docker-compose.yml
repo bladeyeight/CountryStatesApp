@@ -15,7 +15,8 @@ services:
   django-backend:
     build: 
       context: ./country_states_backend/country_states_backend  
-      target: production
+      # target: production
+      target: development
     volumes: 
     - ./country_states_backend/country_states_backend:/app 
     ports:
@@ -27,11 +28,13 @@ services:
   react-frontend:
     build: 
       context: ./CountryStatesApp
-      target: production
+      # target: production
+      target: development
     volumes:
-      # - ./CountryStatesApp:/app
+      - ./CountryStatesApp:/app
       - /app/node_modules
     ports:
+      # - "3000:80"
       - "3000:3000"
     stdin_open: true
     tty: true

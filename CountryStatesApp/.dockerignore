@@ -1,2 +1,5 @@
 node_modules
 build
+DockerFile
+README.md
+.git*

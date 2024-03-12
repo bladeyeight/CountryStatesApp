@@ -1,2 +1,4 @@
-
+DockerFile
 __pycache__
+.git*
+*.sqlite3

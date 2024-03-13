@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Country, State, SetCountriesType} from '../types';
+import { Country, State, SetCountriesType, HeaderProps} from '../types';
 import { Link } from 'react-router-dom';
 import Header from './Header'
 
@@ -16,13 +16,12 @@ export async function fetchCountries(setCountries:SetCountriesType): Promise<voi
   }
 }
 
-const Home:React.FC = () =>  {
+const Home:React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) =>  {
 
   const [countries, setCountries] = useState<Country[]>([]); 
   const [states, setStates] = useState<State[]>([]);
   const [selectedCountryName, setSelectedCountryName] = useState<String>('Here');
   const [selectedStateName, setSelectedStateName] = useState<String>('State List');
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   
   async function fetchStates(countryCode:String, countryName: String) {
     try {
@@ -36,23 +35,28 @@ const Home:React.FC = () =>  {
     }
   }
   useEffect(() => {fetchCountries(setCountries)}, []);
-
-  const handleLogout = () => {
-    // Implement logout logic (e.g., clearing authentication token)
-    setIsAuthenticated(false);
-    // Redirect to home or login page as needed
-  };
-
   
   return (
 <>
-<Header isAuthenticated={isAuthenticated} onLogout={handleLogout}/>
+<Header isAuthenticated={isAuthenticated} onLogout={onLogout}/>
 <div className="d-flex flex-column justify-content-center align-items-center">
 <div style={{height: "50px"}}/>
     <div className="image-and-buttons-container d-flex align-items-center" style={{marginLeft: "7px"}}>
-    <Link to="/AddCountry" className="btn btn-primary">Add Country</Link>
+    {isAuthenticated ? (
+      <Link to="/AddCountry" className="btn btn-primary">Add Country</Link>
+    ) : (
+      <div style={{ width: 'fit-content', visibility: 'hidden' }}>
+        <button className="btn btn-primary" disabled>Add Country</button>
+      </div>
+    )}
       <img src="https://i.imgur.com/o1e9atI.jpeg" alt="Country" style={{ height: "200px", borderRadius: "50%", margin: "0 50px"}}/>
-    <Link to="/AddState" className="btn btn-warning">Add State</Link>
+      {isAuthenticated ? (
+      <Link to="/AddState" className="btn btn-warning">Add State</Link>
+    ) : (
+      <div style={{ width: 'fit-content', visibility: 'hidden' }}>
+        <button className="btn btn-warning" disabled>Add State</button>
+      </div>
+    )}
     </div>
 <div style={{height: "90px"}}/>
     <h2 style={{marginLeft:"35px"}}>Select Your Country</h2>

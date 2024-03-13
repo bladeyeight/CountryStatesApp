@@ -10,5 +10,10 @@ export interface State {
     countryId: number;
   }
 
+export  interface HeaderProps {
+    isAuthenticated: boolean;
+    onLogout: () => void;
+  }
+
 export type SetCountriesType = React.Dispatch<React.SetStateAction<Country[]>>;
 

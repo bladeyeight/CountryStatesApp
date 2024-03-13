@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Country, State, SetCountriesType} from '../types';
 import { Link } from 'react-router-dom';
+import Header from './Header'
 
 export async function fetchCountries(setCountries:SetCountriesType): Promise<void> {
   try {
@@ -21,6 +22,7 @@ const Home:React.FC = () =>  {
   const [states, setStates] = useState<State[]>([]);
   const [selectedCountryName, setSelectedCountryName] = useState<String>('Here');
   const [selectedStateName, setSelectedStateName] = useState<String>('State List');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   
   async function fetchStates(countryCode:String, countryName: String) {
     try {
@@ -35,19 +37,26 @@ const Home:React.FC = () =>  {
   }
   useEffect(() => {fetchCountries(setCountries)}, []);
 
+  const handleLogout = () => {
+    // Implement logout logic (e.g., clearing authentication token)
+    setIsAuthenticated(false);
+    // Redirect to home or login page as needed
+  };
+
   
   return (
+<>
+<Header isAuthenticated={isAuthenticated} onLogout={handleLogout}/>
 <div className="d-flex flex-column justify-content-center align-items-center">
-<h1>Country and State App</h1>
 <div style={{height: "50px"}}/>
-    <div className="image-and-buttons-container d-flex align-items-center" style = {{marginRight: '40px'}}>
+    <div className="image-and-buttons-container d-flex align-items-center" style={{marginLeft: "7px"}}>
     <Link to="/AddCountry" className="btn btn-primary">Add Country</Link>
-      <img src="https://i.imgur.com/o1e9atI.jpeg" alt="Country" style={{ height: "200px", borderRadius: "50%", margin: "0 50px" }}/>
+      <img src="https://i.imgur.com/o1e9atI.jpeg" alt="Country" style={{ height: "200px", borderRadius: "50%", margin: "0 50px"}}/>
     <Link to="/AddState" className="btn btn-warning">Add State</Link>
     </div>
 <div style={{height: "90px"}}/>
-    <h2>Select Your Country</h2>
-    <div className="dropdown">
+    <h2 style={{marginLeft:"35px"}}>Select Your Country</h2>
+    <div className="dropdown" style={{marginLeft:"35px"}}>
         <button className="btn btn-secondary dropdown-toggle" type="button" id="countryButton" data-bs-toggle="dropdown" aria-expanded="false">
             {selectedCountryName}
         </button>
@@ -58,7 +67,7 @@ const Home:React.FC = () =>  {
         </ul>
     </div>
     <div style={{height: "60px"}}/>
-    <div className="dropdown">
+    <div className="dropdown" style={{marginLeft:"35px"}}>
         <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
         {selectedStateName}
         </button>
@@ -69,6 +78,7 @@ const Home:React.FC = () =>  {
         </ul>
     </div>
 </div>
+</>
   );
 }
 

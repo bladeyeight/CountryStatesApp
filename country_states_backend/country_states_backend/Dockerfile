@@ -2,7 +2,7 @@ FROM python:3.9.6 as base
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 WORKDIR /app
-COPY requirements .
+COPY requirements requirements
 
 FROM base as development
 RUN pip install --no-cache-dir -r requirements/base.txt

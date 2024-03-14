@@ -4,7 +4,7 @@ import Home from './components/Home';
 import AddCountry from './components/AddCountry';
 import AddState from './components/AddState';
 import LoginForm from './components/LoginForm';
-import Header from './components/Header';
+import RegistrationForm from './components/RegistrationForm';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -34,6 +34,7 @@ const App: React.FC = () => {
           ) : (
             <Route path="*" element={<Navigate replace to="/login" />} />
           )}
+          <Route path="/register" element={<RegistrationForm onLogin={handleLoginSuccess}/>} />
         </Routes>
       </div>
     </Router>

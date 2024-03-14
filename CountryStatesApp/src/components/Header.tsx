@@ -4,7 +4,7 @@ import { HeaderProps } from '../types';
 
 const Header: React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) => {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ height: '70px' }}>
       <div className="container-fluid d-flex justify-content-between align-items-center">
         {/* Left-aligned Register*/}
         <Link className="nav-link" to="/register">Register</Link>

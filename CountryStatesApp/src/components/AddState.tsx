@@ -25,7 +25,8 @@ const AddState: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const token = localStorage.getItem('token');
+    
     if(!countryId) {
       alert('CountryId is required')
       return;
@@ -38,7 +39,12 @@ const AddState: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/states/', state);
+      const response = await axios.post('http://localhost:8000/api/states/', state,
+      {
+        headers: {
+          'Authorization': `Token ${token}`,
+      }
+      });
       console.log('Response:', response.data);
       navigate('/')
     } catch (error) {

@@ -13,6 +13,7 @@ const AddCountry: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
 
     const country: Country = {
       id: undefined,
@@ -21,7 +22,12 @@ const AddCountry: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/countries/', country);
+      const response = await axios.post('http://localhost:8000/api/countries/', country, 
+      {
+        headers: {
+          'Authorization': `Token ${token}`,
+      }
+      });
       console.log('Response:', response.data);
       navigate('/')
     } catch (error) {

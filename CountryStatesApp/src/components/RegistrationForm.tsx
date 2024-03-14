@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const RegistrationForm: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
     const [username, setUsername] = useState('');
@@ -9,20 +10,22 @@ const RegistrationForm: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:8000/api/register/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password }),
-        });
-        console.log('LoginResponse', response)
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
+        try {
+            const response = await axios.post('http://localhost:8000/api/register/', {
+                username,
+                password
+            });
+            console.log('LoginResponse', response);
+            const { token } = response.data;
+            localStorage.setItem('token', token);
             onLogin();
-            navigate('/')
-        } else {
+            navigate('/');
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.log('Login failed:', error.response?.data);
+            } else {
+                console.log('Unexpected error:', error);
+            }
             alert('Login failed!');
         }
     };

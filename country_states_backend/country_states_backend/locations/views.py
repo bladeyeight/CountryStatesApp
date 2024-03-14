@@ -2,13 +2,17 @@ from rest_framework import viewsets, status
 from .models import Country, State
 from .serializers import CountrySerializer, StateSerializer
 from rest_framework import generics
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework import permissions
 from .serializers import UserSerializer
 from django.http import HttpResponse
+from knox.views import LoginView as KnoxLoginView
+from knox.models import AuthToken
 
     # permission_classes = [IsAuthenticated]
 
@@ -43,26 +47,31 @@ class StateListView(generics.ListAPIView):
         return State.objects.filter(countryId__code=country_code)
 
 class LoginView(APIView):
+    permission_classes = [permissions.AllowAny,]
+
     def post(self, request, *args, **kwargs):
-        print('LoginDataReceived', request.data)
-        username = request.data.get("username")
-        password = request.data.get("password")
-        user = authenticate(username=username, password=password)
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+        print('RequestReceived', request.data)
         if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key})
+            _, token = AuthToken.objects.create(user)
+            return Response({
+                'username': user.username,
+                'token': token
+            })
         else:
-            return Response({"error": "Invalid Credentials"}, status=400)
-        
+            return Response({"error": "Invalid Credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
 class RegisterView(APIView):
+    permission_classes = [permissions.AllowAny,]
+
     def post(self, request, *args, **kwargs):
-        print('RegistrationDataReceived', request.data)
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            if user:
-                token, created = Token.objects.get_or_create(user=user)
-                return Response({'token': token.key, **serializer.data}, status=status.HTTP_201_CREATED)
+            _, token = AuthToken.objects.create(user)
+            return Response({'user': serializer.data, 'token': token})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # def test_view(request):

@@ -41,14 +41,16 @@ INSTALLED_APPS = [
     'locations',
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
+    'knox',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'knox.auth.TokenAuthentication',
     ],
 }
+REST_AUTH_TOKEN_MODEL = 'knox.models.AuthToken'
+REST_AUTH_TOKEN_CREATOR = 'project.apps.accounts.utils.create_knox_token'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
+import {useAuth} from './AuthContext'
 import axios from 'axios';
 
-const RegistrationForm: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
+const RegistrationForm: React.FC = () => {
+
+    const {login} = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -17,8 +20,7 @@ const RegistrationForm: React.FC<{ onLogin: () => void }> = ({ onLogin }) => {
             });
             console.log('LoginResponse', response);
             const { token } = response.data;
-            localStorage.setItem('token', token);
-            onLogin();
+            login(token);
             navigate('/');
         } catch (error) {
             if (axios.isAxiosError(error)) {

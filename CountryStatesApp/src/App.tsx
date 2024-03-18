@@ -5,39 +5,28 @@ import AddCountry from './components/AddCountry';
 import AddState from './components/AddState';
 import LoginForm from './components/LoginForm';
 import RegistrationForm from './components/RegistrationForm';
+import {AuthProvider, useAuth} from './components/AuthContext';
+import AuthenticatedRoutes from './components/AuthenticatedRoutes';
+
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
-  const handleLoginSuccess = (): void => {
-    setIsAuthenticated(true);
-    console.log('IsLoggedIn')
-  };
-
-  const handleLogout = (): void => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('token');
-    console.log('IsLoggedOut')
-  };
-
   return (
-    <Router>
-      <div style={{backgroundColor: 'tan', minHeight: '100vh'}}>
-        <Routes>
-          <Route path="/" element={<Home isAuthenticated={isAuthenticated} onLogout={handleLogout}/>} />
-          <Route path="/login" element={!isAuthenticated ? <LoginForm onLogin={handleLoginSuccess} /> : <Navigate replace to="/" />} />
-          {isAuthenticated ? (
-            <>
+    <AuthProvider>
+      <Router>
+        <div style={{ backgroundColor: 'tan', minHeight: '100vh' }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<RegistrationForm />} />
+            {/* Protect these routes */}
+            <Route element={<AuthenticatedRoutes />}>
               <Route path="/AddCountry" element={<AddCountry />} />
               <Route path="/AddState" element={<AddState />} />
-            </>
-          ) : (
-            <Route path="*" element={<Navigate replace to="/login" />} />
-          )}
-          <Route path="/register" element={<RegistrationForm onLogin={handleLoginSuccess}/>} />
-        </Routes>
-      </div>
-    </Router>
+            </Route>
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 };
 

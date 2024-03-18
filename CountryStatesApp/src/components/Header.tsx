@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HeaderProps } from '../types';
+import {useAuth} from './AuthContext';
 
-const Header: React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) => {
+const Header: React.FC = () => {
+
+  const {isAuthenticated, logout} = useAuth();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light" style={{ height: '70px' }}>
       <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -17,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) => {
           {!isAuthenticated ? (
             <Link className="nav-link" to="/login">Login</Link>
           ) : (
-            <button className="nav-link btn btn-link" onClick={onLogout}>Logout</button>
+            <button className="nav-link btn btn-link" onClick={logout}>Logout</button>
           )}
         </div>
       </div>

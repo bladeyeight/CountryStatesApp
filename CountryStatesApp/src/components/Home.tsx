@@ -1,9 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Country, State, SetCountriesType, HeaderProps} from '../types';
+import { Country, State, SetCountriesType} from '../types';
 import { Link } from 'react-router-dom';
-import Header from './Header'
+import Header from './Header';
+import {useAuth} from './AuthContext';
 
 export async function fetchCountries(setCountries:SetCountriesType): Promise<void> {
   try {
@@ -16,8 +17,9 @@ export async function fetchCountries(setCountries:SetCountriesType): Promise<voi
   }
 }
 
-const Home:React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) =>  {
+const Home:React.FC = () =>  {
 
+  const {isAuthenticated} = useAuth();
   const [countries, setCountries] = useState<Country[]>([]); 
   const [states, setStates] = useState<State[]>([]);
   const [selectedCountryName, setSelectedCountryName] = useState<String>('Here');
@@ -38,7 +40,7 @@ const Home:React.FC<HeaderProps> = ({ isAuthenticated, onLogout }) =>  {
   
   return (
 <>
-<Header isAuthenticated={isAuthenticated} onLogout={onLogout}/>
+<Header/>
 <div className="d-flex flex-column justify-content-center align-items-center">
 <div style={{height: "50px"}}/>
     <div className="image-and-buttons-container d-flex align-items-center" style={{marginLeft: "7px"}}>

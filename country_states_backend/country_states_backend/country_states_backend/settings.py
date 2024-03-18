@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -49,6 +50,11 @@ REST_FRAMEWORK = {
         'knox.auth.TokenAuthentication',
     ],
 }
+
+REST_KNOX = {
+  'TOKEN_TTL': timedelta(minutes=5),
+}
+
 REST_AUTH_TOKEN_MODEL = 'knox.models.AuthToken'
 REST_AUTH_TOKEN_CREATOR = 'project.apps.accounts.utils.create_knox_token'
 

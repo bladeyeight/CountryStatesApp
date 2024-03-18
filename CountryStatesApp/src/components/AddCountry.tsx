@@ -4,6 +4,8 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import {Country} from '../types'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
+import secureApi from '../utils/api';
+
 
 
 const AddCountry: React.FC = () => {
@@ -22,12 +24,7 @@ const AddCountry: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/countries/', country, 
-      {
-        headers: {
-          'Authorization': `Token ${token}`,
-      }
-      });
+      const response = await secureApi.post('countries/', country);
       console.log('Response:', response.data);
       navigate('/')
     } catch (error) {

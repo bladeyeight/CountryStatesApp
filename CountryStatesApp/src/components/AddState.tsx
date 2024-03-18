@@ -5,6 +5,7 @@ import {State, Country} from '../types'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import { fetchCountries } from './Home';
+import secureApi from '../utils/api';
 
 
 const AddState: React.FC = () => {
@@ -39,12 +40,7 @@ const AddState: React.FC = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8000/api/states/', state,
-      {
-        headers: {
-          'Authorization': `Token ${token}`,
-      }
-      });
+      const response = await secureApi.post('states/', state);
       console.log('Response:', response.data);
       navigate('/')
     } catch (error) {
